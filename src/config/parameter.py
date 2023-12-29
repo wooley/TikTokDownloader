@@ -5,6 +5,7 @@ from time import strftime
 from requests import exceptions
 from requests import get
 from typing import Union
+from typing import List
 
 from src.CookieTool import Register
 from src.DataExtractor import Extractor
@@ -180,7 +181,7 @@ class Parameter:
             f"folder_name 参数 {folder_name} 不是有效的文件夹名称，程序将使用默认值：Download")
         return "Download"
 
-    def check_name_format(self, name_format: str) -> list[str]:
+    def check_name_format(self, name_format: str) -> List[str]:
         name_keys = name_format.strip().split(" ")
         if all(i in self.name_keys for i in name_keys):
             self.logger.info(f"name_format 参数已设置为 {name_format}", False)
