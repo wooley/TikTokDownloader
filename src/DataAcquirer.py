@@ -287,7 +287,7 @@ class Link:
         return None, []
 
     @staticmethod
-    def extract_sec_user_id(urls: list[str]) -> list[list]:
+    def extract_sec_user_id(urls: List[str]) -> List[List]:
         data = []
         for url in urls:
             url = urlparse(url)
@@ -1140,14 +1140,14 @@ class TikTokAccount:
     def __init__(self, path: str):
         self.path = Path(path.replace("\"", ""))
 
-    def run(self) -> list[str, str, list[str]]:
+    def run(self) -> list[str, str, List[str]]:
         if self.path.is_file() and self.path.suffix == ".html":
             return self.__read_html_file([self.path])
         elif self.path.is_dir():
             return self.__read_html_file(self.path.glob("*.html"))
         return []
 
-    def __read_html_file(self, items) -> list[str, str, list[str]]:
+    def __read_html_file(self, items) -> list[str, str, List[str]]:
         ids = []
         for i in items:
             with i.open("r", encoding="utf-8") as f:
@@ -1155,7 +1155,7 @@ class TikTokAccount:
             ids.append(self.__extract_id_data(data))
         return [i for i in ids if all(i)]
 
-    def __extract_id_data(self, html: str) -> (str, str, list[str]):
+    def __extract_id_data(self, html: str) -> (str, str, List[str]):
         html_tree = HTML(html)
         urls = html_tree.xpath(self.urls)
         uid = self.__extract_uid(html_tree.xpath(self.uid))
