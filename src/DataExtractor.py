@@ -4,6 +4,7 @@ from time import localtime
 from time import strftime
 from time import time
 from types import SimpleNamespace
+from typing import List, Dict
 from urllib.parse import urlparse
 from typing import Union
 from types import SimpleNamespace
@@ -77,24 +78,24 @@ class Extractor:
 
     def run(
             self,
-            data: list[dict],
+            data: List[Dict],
             recorder,
             type_="works",
-            **kwargs) -> list[dict]:
+            **kwargs) -> List[Dict]:
         if type_ not in self.type.keys():
             raise ValueError
         return self.type[type_](data, recorder, **kwargs)
 
     def batch(
             self,
-            data: list[dict],
+            data: List[Dict],
             recorder,
             name: str,
             mark: str,
             earliest,
             latest,
             same=True,
-    ) -> list[dict]:
+    ) -> List[Dict]:
         container = SimpleNamespace(
             all_data=[],
             template={
