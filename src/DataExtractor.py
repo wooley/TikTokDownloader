@@ -335,7 +335,7 @@ class Extractor:
             container.cache["mark"] = name
 
     def preprocessing_data(self,
-                           data: list[dict],
+                           data: List[Dict],
                            mark="",
                            post=True,
                            mix=False) -> tuple:
@@ -354,7 +354,7 @@ class Extractor:
         return id_, name.strip(), mid, title.strip(
         ), mark.strip(), data[:None if post else -1]
 
-    def works(self, data: list[dict], recorder) -> list[dict]:
+    def works(self, data: List[Dict], recorder) -> List[Dict]:
         container = SimpleNamespace(
             all_data=[],
             template={
@@ -370,8 +370,8 @@ class Extractor:
         self.__condition_filter(container)
         return container.all_data
 
-    def comment(self, data: list[dict], recorder,
-                source=False) -> tuple[list[dict], list]:
+    def comment(self, data: List[Dict], recorder,
+                source=False) -> tuple[List[Dict], list]:
         if not any(data):
             return [{}], []
         container = SimpleNamespace(
@@ -430,7 +430,7 @@ class Extractor:
         if container.cache["reply_comment_total"] != "0":
             container.reply_ids.append(container.cache["cid"])
 
-    def live(self, data: list[dict], *args) -> list[dict]:
+    def live(self, data: List[Dict], *args) -> List[Dict]:
         container = SimpleNamespace(all_data=[])
         [self.extract_live_data(container,
                                 self.generate_data_object(i)) for i in data]
@@ -454,7 +454,7 @@ class Extractor:
                      "user_count_str": self.safe_extract(data, "stats.user_count_str"), }
         container.all_data.append(live_data)
 
-    def user(self, data: list[dict], recorder) -> list[dict]:
+    def user(self, data: List[Dict], recorder) -> List[Dict]:
         container = SimpleNamespace(
             all_data=[],
             cache=None,
@@ -511,7 +511,7 @@ class Extractor:
         container.cache["url"] = f"https://www.douyin.com/user/{container.cache['sec_uid']}"
         container.all_data.append(container.cache)
 
-    def search(self, data: list[dict], recorder, tab: int) -> list[dict]:
+    def search(self, data: List[Dict], recorder, tab: int) -> List[Dict]:
         if tab in {0, 1}:
             return self.search_general(data, recorder)
         elif tab == 2:
@@ -519,7 +519,7 @@ class Extractor:
         elif tab == 3:
             return self.search_live(data, recorder)
 
-    def search_general(self, data: list[dict], recorder) -> list[dict]:
+    def search_general(self, data: List[Dict], recorder) -> List[Dict]:
         container = SimpleNamespace(
             all_data=[],
             cache=None,
@@ -555,8 +555,8 @@ class Extractor:
 
     def search_user(
             self,
-            data: list[dict],
-            recorder) -> list[dict]:
+            data: List[Dict],
+            recorder) -> List[Dict]:
         container = SimpleNamespace(
             all_data=[],
             cache=None,
@@ -598,8 +598,8 @@ class Extractor:
 
     def search_live(
             self,
-            data: list[dict],
-            recorder) -> list[dict]:
+            data: List[Dict],
+            recorder) -> List[Dict]:
         container = SimpleNamespace(
             all_data=[],
             cache=None,
@@ -622,7 +622,7 @@ class Extractor:
         container.cache["room_id"] = self.safe_extract(data, "aweme_id")
         container.all_data.append(container.cache)
 
-    def hot(self, data: list[dict], recorder) -> list[dict]:
+    def hot(self, data: List[Dict], recorder) -> List[Dict]:
         all_data = []
         [self._deal_hot_data(all_data, self.generate_data_object(i))
          for i in data]
@@ -642,7 +642,7 @@ class Extractor:
         }
         container.append(cache)
 
-    def record_data(self, record, data: list[dict]):
+    def record_data(self, record, data: List[Dict]):
         for i in data:
             record.save(self.extract_values(record, i))
 
@@ -666,9 +666,9 @@ class Extractor:
 
     def source_date_filter(
             self,
-            data: list[dict],
+            data: List[Dict],
             earliest,
-            latest) -> list[dict]:
+            latest) -> List[Dict]:
         result = []
         for item in data:
             create_time = datetime.fromtimestamp(
@@ -683,6 +683,6 @@ class Extractor:
         data = Extractor.generate_data_object(data)
         return Extractor.safe_extract(data, "mix_info.mix_id")
 
-    def _extract_item_records(self, data: list[dict]):
+    def _extract_item_records(self, data: List[Dict]):
         for i in data:
             self.log.info(f"{i['type']} {i['id']} 数据提取成功", False)
