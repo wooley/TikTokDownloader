@@ -1,7 +1,7 @@
 from flask import render_template
 from flask import request
 from flask import url_for
-from typing import Union
+from typing import Union, List, Dict
 
 from src.DataAcquirer import Live
 from src.main_complete import TikTok
@@ -31,7 +31,7 @@ class WebUI(TikTok):
             "preview": self.preview}
 
     @staticmethod
-    def _convert_bool(data: dict):
+    def _convert_bool(data: Dict):
         for i in (
                 "folder_mode",
                 "music",
@@ -49,13 +49,13 @@ class WebUI(TikTok):
             except ValueError:
                 data[i] = j
 
-    def update_settings(self, data: dict, api=True):
+    def update_settings(self, data: Dict, api=True):
         if not api:
             self._convert_bool(data)
         # print(data)  # 调试使用
         return self.parameter.update_settings_data(data)
 
-    def deal_single_works(self, url: str, download: bool) -> dict:
+    def deal_single_works(self, url: str, download: bool) -> Dict:
         tiktok, ids = self.links.works(url)
         if not ids:
             self.logger.warning(f"{url} 提取作品 ID 失败")
@@ -65,7 +65,7 @@ class WebUI(TikTok):
             return self.generate_works_data(d) if (d := self.input_links_acquisition(
                 tiktok, ids[:1], record, not download)) else {}
 
-    def generate_works_data(self, data: Union[list[dict], str]) -> dict:
+    def generate_works_data(self, data: Union[List[Dict], str]) -> Dict:
         if isinstance(data, str):
             return self.error_works | {"text": "后台下载作品成功！", "preview": data}
         data = data[0]
@@ -80,7 +80,7 @@ class WebUI(TikTok):
             "dynamic": data["dynamic_cover"],
             "preview": data["origin_cover"] or d[0]}
 
-    def deal_live_data(self, url: str) -> dict:
+    def deal_live_data(self, url: str) -> Dict:
         params = self._generate_live_params(*self.links.live(url))
         if not params:
             return {}
@@ -93,7 +93,7 @@ class WebUI(TikTok):
         return self.generate_live_data(live_data)
 
     @staticmethod
-    def generate_live_data(data: dict) -> dict:
+    def generate_live_data(data: Dict) -> Dict:
         return {
             "text": "\n".join((f"直播标题: {data['title']}",
                                f"主播昵称: {data['nickname']}",
@@ -101,7 +101,7 @@ class WebUI(TikTok):
                                f"观看次数: {data['total_user_str']}",)),
             "flv": data["flv_pull_url"],
             "m3u8": data["hls_pull_url_map"],
-            "best": list(data["flv_pull_url"].values())[0],
+            "best": List(data["flv_pull_url"].values())[0],
             "preview": data["cover"]}
 
     def run_server(self, app):
