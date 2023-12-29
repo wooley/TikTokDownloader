@@ -122,7 +122,7 @@ class Extractor:
         result = [i for i in container.all_data if condition_filter(i)]
         container.all_data = result
 
-    def summary_works(self, data: list[dict]):
+    def summary_works(self, data: List[Dict]):
         self.log.info(f"当前账号筛选作品数量: {len(data)}")
 
     def extract_batch(
