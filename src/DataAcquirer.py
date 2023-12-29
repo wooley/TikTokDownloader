@@ -1147,7 +1147,7 @@ class TikTokAccount:
             return self.__read_html_file(self.path.glob("*.html"))
         return []
 
-    def __read_html_file(self, items) -> List[str, str, List[str]]:
+    def __read_html_file(self, items) -> Tuple[str, str, List[str]]:
         ids = []
         for i in items:
             with i.open("r", encoding="utf-8") as f:
