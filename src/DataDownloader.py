@@ -4,6 +4,7 @@ from pathlib import Path
 from shutil import move
 from time import time
 from types import SimpleNamespace
+from typing import List, Dict, Tuple
 
 from requests import exceptions
 from requests import get
@@ -106,7 +107,7 @@ class Downloader:
         return headers, {"User-Agent": headers["User-Agent"]}
 
     def run(self,
-            data: list[dict],
+            data: List[Dict],
             type_: str,
             **kwargs, ) -> None:
         if not self.download:
@@ -121,7 +122,7 @@ class Downloader:
 
     def run_batch(
             self,
-            data: list[dict],
+            data: List[Dict],
             id_: str,
             name: str,
             mark="",
@@ -140,11 +141,11 @@ class Downloader:
             mix)
         self.batch_processing(data, root)
 
-    def run_general(self, data: list[dict], tiktok: bool):
+    def run_general(self, data: List[Dict], tiktok: bool):
         root = self.storage_folder()
         self.batch_processing(data, root, False, tiktok=tiktok)
 
-    def run_live(self, data: list[tuple]):
+    def run_live(self, data: List[Tuple]):
         if not data or not self.download:
             return
         download_tasks = []
@@ -201,7 +202,7 @@ class Downloader:
 
     def batch_processing(
             self,
-            data: list[dict],
+            data: List[Dict],
             root: Path,
             statistics=True,
             **kwargs):
@@ -241,7 +242,7 @@ class Downloader:
 
     def downloader_chart(
             self,
-            tasks: list[tuple],
+            tasks: List[Tuple],
             count: SimpleNamespace,
             progress: Progress,
             max_workers=MAX_WORKERS,
