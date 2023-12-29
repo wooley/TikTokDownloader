@@ -405,7 +405,7 @@ class MsToken:
         if response := send_request(
                 MsToken.API,
                 MsToken.HEADERS,
-                dumps(MsToken.DATA | {"tspFromClient": int(time() * 1000)}),
+                dumps({**MsToken.DATA, "tspFromClient": int(time() * 1000)}),
         ):
             return TtWid.extract(response.headers, "msToken")
 
