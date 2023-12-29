@@ -1,6 +1,7 @@
 from pathlib import Path
 from platform import system
 from shutil import which
+from typing import List
 from subprocess import Popen
 
 __all__ = ["FFMPEG"]
@@ -25,7 +26,7 @@ class FFMPEG:
         # return None  # 调试使用
         return self.__check_system_ffmpeg() or self.__check_system_ffmpeg(path)
 
-    def download(self, data: list[tuple], proxies, timeout, user_agent):
+    def download(self, data: List[tuple], proxies, timeout, user_agent):
         for u, p in data:
             command = self.__generate_command(
                 u, p, proxies, timeout, user_agent)
