@@ -97,7 +97,7 @@ class Acquirer:
         self.__set_temp_cookie(cookie)
 
     @staticmethod
-    def init_headers(headers: dict) -> tuple:
+    def init_headers(headers: dict) -> Tuple:
         return (headers | {
             "Referer": "https://www.douyin.com/", },
                 {"User-Agent": headers["User-Agent"]})
@@ -254,7 +254,7 @@ class Link:
         share = self.account_share.findall(urls)
         return link + share
 
-    def works(self, text: str) -> tuple:
+    def works(self, text: str) -> Tuple:
         urls = self.share.run(text)
         if u := self.works_link_tiktok.findall(urls):
             return True, u
@@ -264,7 +264,7 @@ class Link:
                                for i in self.account_link.findall(urls)] if i]
         return False, link + share + account
 
-    def mix(self, text: str) -> tuple:
+    def mix(self, text: str) -> Tuple:
         urls = self.share.run(text)
         if u := self.works_share.findall(urls):
             return False, u
@@ -276,7 +276,7 @@ class Link:
             return True, u
         return None, []
 
-    def live(self, text: str) -> tuple:
+    def live(self, text: str) -> Tuple:
         urls = self.share.run(text)
         if u := self.live_link.findall(urls):
             return True, u
@@ -317,14 +317,14 @@ class Account(Acquirer):
         self.earliest, self.latest = self.check_date(earliest, latest)
         self.info = Info(params, sec_user_id, cookie)
 
-    def check_type(self, tab: str, pages: int) -> tuple[str, bool, int]:
+    def check_type(self, tab: str, pages: int) -> Tuple[str, bool, int]:
         if tab == "favorite":
             return self.favorite_api, True, pages
         elif tab != "post":
             self.log.warning(f"tab 参数 {tab} 设置错误，程序将使用默认值: post")
         return self.post_api, False, 99999
 
-    def check_date(self, start: str, end: str) -> tuple[date, date]:
+    def check_date(self, start: str, end: str) -> Tuple[date, date]:
         return self.check_earliest(start), self.check_latest(end)
 
     def check_earliest(self, date_: str) -> date:
