@@ -171,7 +171,7 @@ class Downloader:
                 headers=self.black_headers)
 
     def generate_live_tasks(
-            self, data: list[tuple[dict, str]], tasks: list, commands: list):
+            self, data: List[Tuple[Dict, str]], tasks: list, commands: list):
         for i, f, m in data:
             name = self.cleaner.filter_name(
                 f'{i["title"]}{self.split}{i["nickname"]}{self.split}{datetime.now():%Y-%m-%d %H.%M.%S}.flv',
@@ -259,7 +259,7 @@ class Downloader:
                         progress=progress)
 
     def deal_folder_path(self, root: Path, name: str,
-                         pass_=False) -> tuple[Path, Path]:
+                         pass_=False) -> Tuple[Path, Path]:
         root = self.create_works_folder(root, name, pass_)
         root.mkdir(exist_ok=True)
         temp = self.__temp.joinpath(name)
