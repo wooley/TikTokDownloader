@@ -1140,7 +1140,7 @@ class TikTokAccount:
     def __init__(self, path: str):
         self.path = Path(path.replace("\"", ""))
 
-    def run(self) -> List[str, str, List[str]]:
+    def run(self) -> Tuple[str, str, List[str]]:
         if self.path.is_file() and self.path.suffix == ".html":
             return self.__read_html_file([self.path])
         elif self.path.is_dir():
