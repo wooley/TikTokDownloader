@@ -2,7 +2,7 @@ from datetime import date
 from datetime import datetime
 from random import choice
 from time import time
-from typing import Union
+from typing import Union, Tuple, List
 from types import SimpleNamespace
 
 from src.DataAcquirer import (
@@ -174,7 +174,7 @@ class TikTok:
             num: int,
             uid: str,
             nickname: str,
-            item: list[str],
+            item: List[str],
             root,
             params: dict,
             logger,
@@ -194,7 +194,7 @@ class TikTok:
             tab,
             addition="发布作品" if tab else "喜欢作品", )
 
-    def __check_post_tiktok(self, uid: str, nickname: str, item: list[dict]):
+    def __check_post_tiktok(self, uid: str, nickname: str, item: List[dict]):
         cache = self.extractor.generate_data_object(choice(item))
         uid_ = self.extractor.safe_extract(cache, "author.uid")
         nickname_ = self.extractor.safe_extract(cache, "author.nickname")
@@ -374,7 +374,7 @@ class TikTok:
 
     def download_account_works(
             self,
-            data: list[dict],
+            data: List[dict],
             id_: str,
             name: str,
             mark: str,
@@ -407,7 +407,7 @@ class TikTok:
     def input_links_acquisition(
             self,
             tiktok: bool,
-            ids: list[str],
+            ids: List[str],
             record,
             api=False,
             source=False,
@@ -467,7 +467,7 @@ class TikTok:
             self.downloader.run_live(download_tasks)
         self.logger.info("已退出获取直播推流地址模式")
 
-    def _generate_live_params(self, rid: bool, ids: list[list]) -> list[dict]:
+    def _generate_live_params(self, rid: bool, ids: List[list]) -> List[dict]:
         if not ids:
             self.console.print("提取 web_rid 或者 room_id 失败！", style=WARNING)
             return []
@@ -476,7 +476,7 @@ class TikTok:
         else:
             return [{"room_id": id_[0], "sec_user_id": id_[1]} for id_ in ids]
 
-    def show_live_info(self, data: list[dict]) -> list[tuple]:
+    def show_live_info(self, data: List[dict]) -> List[tuple]:
         download_tasks = []
         for item in data:
             self.console.print("直播标题:", item["title"])
@@ -614,7 +614,7 @@ class TikTok:
         self.logger.warning("采集合集作品数据失败")
         return None
 
-    def _check_mix_id(self, url: str) -> tuple[bool, str]:
+    def _check_mix_id(self, url: str) -> Tuple[bool, str]:
         mix_id, id_ = self.links.mix(url)
         return (mix_id, id_[0]) if len(id_) > 0 else (mix_id, "")
 
@@ -650,7 +650,7 @@ class TikTok:
             root,
             params,
             logger,
-            data: list[dict],
+            data: List[dict],
             source=False):
         if not any(data):
             self.logger.warning("采集账号数据失败")
