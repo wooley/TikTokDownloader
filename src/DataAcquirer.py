@@ -1140,14 +1140,14 @@ class TikTokAccount:
     def __init__(self, path: str):
         self.path = Path(path.replace("\"", ""))
 
-    def run(self) -> list[str, str, List[str]]:
+    def run(self) -> List[str, str, List[str]]:
         if self.path.is_file() and self.path.suffix == ".html":
             return self.__read_html_file([self.path])
         elif self.path.is_dir():
             return self.__read_html_file(self.path.glob("*.html"))
         return []
 
-    def __read_html_file(self, items) -> list[str, str, List[str]]:
+    def __read_html_file(self, items) -> List[str, str, List[str]]:
         ids = []
         for i in items:
             with i.open("r", encoding="utf-8") as f:
