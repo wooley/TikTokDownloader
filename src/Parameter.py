@@ -338,7 +338,7 @@ class XBogus:
 
 class MsToken:
     """代码参考: https://github.com/Johnserf-Seed/f2/blob/main/f2/apps/douyin/utils.py"""
-    HEADERS.update({"Content-Type": "text/plain;charset=UTF-8"})
+    HEADERS = {"Content-Type": "text/plain;charset=UTF-8"}  # 将HEADERS改为类属性
 
     API = "https://mssdk.bytedance.com/web/report"
     DATA = {
