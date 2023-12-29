@@ -4,7 +4,7 @@ from time import localtime
 from time import strftime
 from time import time
 from types import SimpleNamespace
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from urllib.parse import urlparse
 from typing import Union
 from types import SimpleNamespace
@@ -371,7 +371,7 @@ class Extractor:
         return container.all_data
 
     def comment(self, data: List[Dict], recorder,
-                source=False) -> tuple[List[Dict], list]:
+                source=False) -> Tuple[List[Dict], List]:
         if not any(data):
             return [{}], []
         container = SimpleNamespace(
