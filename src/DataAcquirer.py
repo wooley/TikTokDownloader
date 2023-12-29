@@ -97,7 +97,7 @@ class Acquirer:
         self.__set_temp_cookie(cookie)
 
     @staticmethod
-    def init_headers(headers: dict) -> Tuple:
+    def init_headers(headers: Dict) -> Tuple:
         return (headers | {
             "Referer": "https://www.douyin.com/", },
                 {"User-Agent": headers["User-Agent"]})
@@ -138,12 +138,12 @@ class Acquirer:
                 self.log.warning("响应内容为空，可能是接口失效或者 Cookie 失效，请尝试更新 Cookie")
             return False
 
-    def deal_url_params(self, params: dict, version=23):
+    def deal_url_params(self, params: Dict, version=23):
         self.__add_ms_token(params)
         params["X-Bogus"] = self.xb.get_x_bogus(params, self.ua_code, version)
 
-    def __add_ms_token(self, params: dict):
-        if isinstance(self.cookie, dict) and "msToken" in self.cookie:
+    def __add_ms_token(self, params: Dict):
+        if isinstance(self.cookie, Dict) and "msToken" in self.cookie:
             params["msToken"] = self.cookie["msToken"]
 
     def deal_item_data(
@@ -183,7 +183,7 @@ class Share:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome"
                       "/116.0.0.0 Safari/537.36", }
 
-    def __init__(self, logger, proxies: dict, max_retry=10):
+    def __init__(self, logger, proxies: Dict, max_retry=10):
         self.max_retry = max_retry
         self.log = logger
         self.proxies = proxies
@@ -475,7 +475,7 @@ class Works(Acquirer):
         self.tiktok = tiktok
 
     @retry
-    def run(self) -> dict:
+    def run(self) -> Dict:
         if self.tiktok:
             params = {
                 "aweme_id": self.id,
@@ -714,7 +714,7 @@ class Live(Acquirer):
         self.room_id = room_id
         self.sec_user_id = sec_user_id
 
-    def run(self) -> dict:
+    def run(self) -> Dict:
         if self.web_rid:
             return self.with_web_rid()
         elif self.room_id:
@@ -722,7 +722,7 @@ class Live(Acquirer):
         else:
             return {}
 
-    def with_web_rid(self) -> dict:
+    def with_web_rid(self) -> Dict:
         params = {
             "aid": "6383",
             "app_name": "douyin_web",
@@ -736,7 +736,7 @@ class Live(Acquirer):
         self.deal_url_params(params)
         return self.get_live_data(api, params)
 
-    def with_room_id(self) -> dict:
+    def with_room_id(self) -> Dict:
         params = {
             "type_id": "0",
             "live_id": "1",
@@ -754,8 +754,8 @@ class Live(Acquirer):
     def get_live_data(
             self,
             api: str,
-            params: dict,
-            headers: dict = None) -> dict:
+            params: Dict,
+            headers: Dict = None) -> Dict:
         if not (
                 data := self.send_request(
                     api,
@@ -776,7 +776,7 @@ class User(Acquirer):
         self.sec_user_id = sec_user_id
 
     @retry
-    def run(self) -> dict:
+    def run(self) -> Dict:
         params = {
             "device_platform": "webapp",
             "aid": "6383",
@@ -921,7 +921,7 @@ class Search(Acquirer):
         self._get_search_data(data.api, params, "data", finished=True)
 
     @retry
-    def _get_search_data(self, api: str, params: dict, key: str):
+    def _get_search_data(self, api: str, params: Dict, key: str):
         if not (
                 data := self.send_request(
                     api,
@@ -1110,7 +1110,7 @@ class Info(Acquirer):
         }
 
     @retry
-    def run(self) -> dict:
+    def run(self) -> Dict:
         self.deal_url_params(self.params)
         form = {
             "sec_user_ids": f'["{self.sec_user_id}"]'
