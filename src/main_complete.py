@@ -2,6 +2,7 @@ from datetime import date
 from datetime import datetime
 from random import choice
 from time import time
+from typing import Union
 from types import SimpleNamespace
 
 from src.DataAcquirer import (
@@ -35,7 +36,7 @@ __all__ = [
 
 def prompt(
         title: str,
-        choose: tuple | list,
+        choose: Union[tuple, list],
         console,
         separate=None) -> str:
     screen = f"{title}:\n"
@@ -160,16 +161,13 @@ class TikTok:
 
     def __summarize_results(self, count: SimpleNamespace, name="账号"):
         time_ = time() - count.time
+        total_processed = count.success + count.failed
+        minutes = int(time_ // 60)
+        seconds = int(time_ % 60)
+
         self.logger.info(
-            f"程序共处理 {
-            count.success +
-            count.failed} 个{name}，成功 {
-            count.success} 个，失败 {
-            count.failed} 个，耗时 {
-            int(time_ //
-                60)} 分钟 {
-            int(time_ %
-                60)} 秒")
+            f"程序共处理 {total_processed} 个{name}，成功 {count.success} 个，失败 {count.failed} 个，耗时 {minutes} 分钟 {seconds} 秒"
+        )
 
     def _deal_account_works_tiktok(
             self,
@@ -200,20 +198,20 @@ class TikTok:
         cache = self.extractor.generate_data_object(choice(item))
         uid_ = self.extractor.safe_extract(cache, "author.uid")
         nickname_ = self.extractor.safe_extract(cache, "author.nickname")
-        match (uid == uid_, nickname == nickname_):
-            case True, True:
-                return True
-            case False, False:
-                item.append({
-                    "author": {
-                        "nickname": nickname,
-                        "uid": uid,
-                    }
-                })
-                return False
-            case _:
-                self.logger.error(f"发生异常: {uid, uid_, nickname, nickname_}")
-                return False
+
+        if uid == uid_ and nickname == nickname_:
+            return True
+        elif uid != uid_ and nickname != nickname_:
+            item.append({
+                "author": {
+                    "nickname": nickname,
+                    "uid": uid,
+                }
+            })
+            return False
+        else:
+            self.logger.error(f"发生异常: {uid, uid_, nickname, nickname_}")
+            return False
 
     def account_acquisition_interactive(self):
         root, params, logger = self.record.run(self.parameter)
@@ -346,7 +344,7 @@ class TikTok:
         id_, name, mid, title, mark, data = self.extractor.preprocessing_data(
             data, mark, post, mix)
         addition = addition or ("合集作品" if mix else "发布作品" if post else "喜欢作品")
-        old_mark = f"{m["mark"]}_{addition}" if (
+        old_mark = f"{m['mark']}_{addition}" if (
             m := self.cache.data.get(
                 mid if mix else id_)) else None
         with logger(root, name=f"{'MID' if mix else 'UID'}{mid if mix else id_}_{mark}_{addition}", old=old_mark,
@@ -442,7 +440,7 @@ class TikTok:
     def _choice_live_quality(
             self,
             flv_items: dict,
-            m3u8_items: dict) -> tuple | None:
+            m3u8_items: dict) -> Union[tuple ,None]:
         try:
             choice_ = self.console.input(
                 "请选择下载清晰度(输入清晰度或者对应序号，直接回车代表不下载): ")
@@ -568,8 +566,7 @@ class TikTok:
             mix_id, id_ = self._check_mix_id(data.url)
             if not id_:
                 self.logger.warning(
-                    f"配置文件 mix_urls 参数" f"第 {index} 条数据的 url {
-                    data.url} 错误，获取作品 ID 或合集 ID 失败")
+                    f"配置文件 mix_urls 参数" f"第 {index} 条数据的 url {data.url} 错误，获取作品 ID 或合集 ID 失败")
                 count.failed += 1
                 continue
             if not self._deal_mix_works(
@@ -679,8 +676,7 @@ class TikTok:
             self.running = False
         self.logger.info("已退出批量采集账号数据模式")
 
-    def _enter_search_criteria(
-            self, text: str = None) -> None | tuple | bool:
+    def _enter_search_criteria(self, text: str = None) -> Union[None, tuple, bool]:
         if not text:
             text = self._inquire_input(
                 tip="请输入搜索条件:\n(关键词 搜索类型 页数 排序规则 时间筛选)\n")
@@ -697,7 +693,7 @@ class TikTok:
             type_: str = None,
             pages: str = None,
             sort: str = None,
-            publish: str = None, *args) -> tuple | bool:
+            publish: str = None, *args) -> Union[tuple , bool]:
         if not keyword:
             return False
         if args:
@@ -819,11 +815,8 @@ class TikTok:
         self._deal_collection_data(root, params, logger, sec_user_id)
         time_ = time() - start
         self.logger.info(
-            f"程序运行耗时 {
-            int(time_ //
-                60)} 分钟 {
-            int(time_ %
-                60)} 秒")
+            f"程序运行耗时 {int(time_ // 60)} 分钟 {int(time_ % 60)} 秒"
+        )
         self.logger.info("已退出批量下载收藏作品模式")
 
     def _deal_collection_data(

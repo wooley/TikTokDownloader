@@ -4,6 +4,7 @@ from random import randint
 from random import random
 from string import ascii_letters
 from string import digits
+from typing import Union
 from time import time
 from urllib.parse import urlencode
 
@@ -397,7 +398,7 @@ class MsToken:
                              for _ in range(size))}
 
     @staticmethod
-    def get_real_ms_token() -> dict | None:
+    def get_real_ms_token() -> Union[dict, None]:
         if response := send_request(
                 MsToken.API,
                 MsToken.HEADERS,
@@ -414,12 +415,12 @@ class TtWid:
         '{"ticket":"","source":"node"},"cbUrlProtocol":"https","union":true}')
 
     @staticmethod
-    def get_tt_wid() -> dict | None:
+    def get_tt_wid() -> Union[dict, None]:
         if response := send_request(TtWid.API, HEADERS, TtWid.DATA):
             return TtWid.extract(response.headers, "ttwid")
 
     @staticmethod
-    def extract(value, name: str) -> dict | None:
+    def extract(value, name: str) -> Union[dict, None]:
         if c := value.get("Set-Cookie"):
             try:
                 temp = c.split("; ")[0].split("=", 1)
@@ -432,7 +433,7 @@ class WebID:
     API = "https://mcs.zijieapi.com/webid"
 
     @staticmethod
-    def get_web_id(user_agent: str) -> str | None:
+    def get_web_id(user_agent: str) -> Union[str, None]:
         headers = {"User-Agent": user_agent}
         data = (f'{{"app_id":6383,"url":"https://www.douyin.com/","user_agent":'
                 f'"{user_agent}","referer":"https://www.douyin.com/","user_unique_id":""}}')

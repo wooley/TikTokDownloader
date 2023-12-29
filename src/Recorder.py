@@ -11,6 +11,7 @@ from re import sub
 from sqlite3 import connect
 from time import localtime
 from time import strftime
+from typing import Union
 
 from openpyxl import Workbook
 from openpyxl import load_workbook
@@ -104,9 +105,7 @@ class LoggerManager(BaseLogger):
             dir_.mkdir()
         file_handler = FileHandler(
             dir_.joinpath(
-                f"{filename}.log" if filename else f"{strftime(
-                    self._name,
-                    localtime())}.log"),
+                f"{filename}.log" if filename else f"{strftime(self._name,localtime())}.log"),
             encoding=self.encode)
         formatter = Formatter(format_, datefmt="%Y-%m-%d %H:%M:%S")
         file_handler.setFormatter(formatter)
@@ -311,7 +310,7 @@ class SQLLogger(NoneLogger):
             name[0]), self.__clean_characters(
             name[1])
 
-    def __clean_characters(self, text: str | None) -> str | None:
+    def __clean_characters(self, text: Union[str, None]) -> Union[str, None]:
         if isinstance(text, str):
             text = self.SHEET_NAME.sub("_", text)
             text = sub(r"_+", "_", text)

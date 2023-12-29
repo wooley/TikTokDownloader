@@ -1,0 +1,40 @@
+{
+    "accounts_urls": [
+        {
+            "mark": "账号标识，可以设置为空字符串",
+            "url": "账号主页链接",
+            "tab": "账号主页类型",
+            "earliest": "作品最早发布日期",
+            "latest": "作品最晚发布日期"
+        }
+    ],
+    "mix_urls": [
+        {
+            "mark": "合集标识，可以设置为空字符串",
+            "url": "合集链接或者作品链接"
+        }
+    ],
+    "owner_url": {
+        "mark": "账号标识，可以设置为空字符串",
+        "url": "账号主页链接"
+    },
+    "root": "",
+    "folder_name": "Download",
+    "name_format": "create_time type nickname desc",
+    "date_format": "%Y-%m-%d %H:%M:%S",
+    "split": "-",
+    "folder_mode": false,
+    "music": false,
+    "storage_format": "",
+    "cookie": "",
+    "dynamic_cover": false,
+    "original_cover": false,
+    "proxies": "",
+    "download": true,
+    "max_size": 0,
+    "chunk": 1048576,
+    "max_retry": 5,
+    "max_pages": 0,
+    "default_mode": 0,
+    "ffmpeg": ""
+}

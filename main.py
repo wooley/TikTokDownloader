@@ -4,6 +4,7 @@ from shutil import rmtree
 from threading import Event
 from threading import Thread
 from webbrowser import open
+from typing import Union
 
 from flask import Flask
 from flask import abort
@@ -77,8 +78,8 @@ class TikTokDownloader:
     LICENCE = "GNU General Public License v3.0"
     DOCUMENTATION_URL = "https://github.com/JoeanAmier/TikTokDownloader/wiki/Documentation"
     RELEASES = "https://github.com/JoeanAmier/TikTokDownloader/releases/latest"
-    NAME = f"TikTokDownloader v{VERSION_MAJOR}.{
-    VERSION_MINOR}{" Beta" if VERSION_BETA else ""}"
+    NAME = f"TikTokDownloader v{VERSION_MAJOR}.\
+        {VERSION_MINOR}"
     WIDTH = 50
     LINE = ">" * WIDTH
 
@@ -149,8 +150,7 @@ class TikTokDownloader:
         return True
 
     def version(self):
-        self.console.print(f"{self.LINE}\n\n\n{self.NAME.center(
-            self.WIDTH)}\n\n\n{self.LINE}\n", style=MASTER)
+        self.console.print(f"{self.LINE}\n\n\n{self.NAME.center(self.WIDTH)}\n\n\n{self.LINE}\n", style=MASTER)
         self.console.print(f"项目地址: {self.REPOSITORY}", style=MASTER)
         self.console.print(f"项目文档: {self.DOCUMENTATION_URL}", style=MASTER)
         self.console.print(f"开源许可: {self.LICENCE}\n", style=MASTER)
@@ -231,7 +231,7 @@ class TikTokDownloader:
     @start_cookie_task
     def server(
             self,
-            server: APIServer | WebUI | Server,
+            server: Union[APIServer, WebUI, Server],
             host="0.0.0.0",
             token=True):
         """

@@ -4,6 +4,7 @@ from json.decoder import JSONDecodeError
 from pathlib import Path
 from platform import system
 from types import SimpleNamespace
+from typing import Union
 
 from src.custom import INFO, ERROR
 
@@ -82,7 +83,7 @@ class Settings:
         self.console.print("本次运行将会使用各项参数默认值，程序功能可能无法正常使用！")
         return self.__default
 
-    def update(self, settings: dict | SimpleNamespace):
+    def update(self, settings: Union[dict, SimpleNamespace]):
         """更新配置文件"""
         with self.file.open("w", encoding=self.encode) as f:
             dump(

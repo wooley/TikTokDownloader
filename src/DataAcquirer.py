@@ -4,6 +4,7 @@ from pathlib import Path
 from re import compile
 from time import time
 from types import SimpleNamespace
+from typing import Union
 from urllib.parse import parse_qs
 from urllib.parse import quote
 from urllib.parse import urlencode
@@ -106,7 +107,7 @@ class Acquirer:
             params=None,
             method='get',
             headers=None,
-            **kwargs) -> dict | bool:
+            **kwargs) -> Union[dict, bool]:
         try:
             response = request(
                 method,
@@ -851,11 +852,7 @@ class Search(Acquirer):
 
     def run(self):
         data = self.search_params[self.tab]
-        self.PC_headers["Referer"] = (
-            f"https://www.douyin.com/search/{
-            quote(
-                self.keyword)}?" f"source=switch_tab&type={
-            data.type}")
+        self.PC_headers["Referer"] = (f"https://www.douyin.com/search/{quote(self.keyword)}?" f"source=switch_tab&type={data.type}")
         if self.tab in {2, 3}:
             deal = self._run_user_live
         elif self.tab in {0, 1}:
@@ -1079,8 +1076,7 @@ class Collection(Acquirer):
             self.response.append({"author": info})
         else:
             temp_data = Account.temp_data()
-            self.log.warning(f"owner_url 参数未设置 或者 获取账号数据失败，本次运行将临时使用 {
-            temp_data} 作为账号昵称和 UID")
+            self.log.warning(f"owner_url 参数未设置 或者 获取账号数据失败，本次运行将临时使用 {temp_data} 作为账号昵称和 UID")
             fake_data = {
                 "author": {
                     "nickname": temp_data,

@@ -1,5 +1,6 @@
 from pathlib import Path
 from platform import system
+from typing import Union
 from re import finditer
 from subprocess import run
 from time import sleep
@@ -91,7 +92,7 @@ class Cookie:
         for key in keys_to_remove:
             del items[key]
 
-    def write(self, text: dict | str):
+    def write(self, text: Union[dict, str]):
         data = self.settings.read()
         data["cookie"] = text
         self.settings.update(data)

@@ -5,6 +5,9 @@ from time import strftime
 from time import time
 from types import SimpleNamespace
 from urllib.parse import urlparse
+from typing import Union
+from types import SimpleNamespace
+
 
 from src.custom import condition_filter
 
@@ -52,9 +55,9 @@ class Extractor:
 
     @staticmethod
     def safe_extract(
-            data: SimpleNamespace,
-            attribute_chain: str,
-            default: str | int | list | dict | SimpleNamespace = ""):
+        data: SimpleNamespace,
+        attribute_chain: str,
+        default: Union[str, int, list, dict, SimpleNamespace] = ""):
         attributes = attribute_chain.split(".")
         for attribute in attributes:
             if "[" in attribute:
@@ -238,18 +241,11 @@ class Extractor:
 
     @staticmethod
     def _time_conversion(time_: int) -> str:
-        return f"{
-        time_ //
-        1000 //
-        3600:0>2d}:{
-        time_ //
-        1000 %
-        3600 //
-        60:0>2d}:{
-        time_ //
-        1000 %
-        3600 %
-        60:0>2d}"
+        hours = time_ // 1000 // 3600
+        minutes = (time_ // 1000 % 3600) // 60
+        seconds = (time_ // 1000 % 3600) % 60
+        return f"{hours:0>2d}:{minutes:0>2d}:{seconds:0>2d}"
+
 
     def _extract_text_extra(self, item: dict, data: SimpleNamespace):
         text = [
@@ -511,8 +507,7 @@ class Extractor:
             data, "custom_verify", "无")
         container.cache["enterprise"] = self.safe_extract(
             data, "enterprise_verify_reason", "无")
-        container.cache["url"] = f"https://www.douyin.com/user/{
-        container.cache["sec_uid"]}"
+        container.cache["url"] = f"https://www.douyin.com/user/{container.cache['sec_uid']}"
         container.all_data.append(container.cache)
 
     def search(self, data: list[dict], recorder, tab: int) -> list[dict]:

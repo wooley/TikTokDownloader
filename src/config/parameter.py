@@ -4,6 +4,7 @@ from time import strftime
 
 from requests import exceptions
 from requests import get
+from typing import Union
 
 from src.CookieTool import Register
 from src.DataExtractor import Extractor
@@ -11,6 +12,7 @@ from src.Parameter import MsToken
 from src.Parameter import TtWid
 from src.module import Cleaner
 from src.module import FFMPEG
+
 
 __all__ = ["Parameter"]
 
@@ -37,7 +39,7 @@ class Parameter:
             logger,
             xb,
             console,
-            cookie: dict | str,
+            cookie: Union[dict, str],
             root: str,
             accounts_urls: dict,
             mix_urls: dict,
@@ -129,7 +131,7 @@ class Parameter:
     def _check_bool(value: bool) -> bool:
         return value if isinstance(value, bool) else False
 
-    def check_cookie(self, cookie: dict | str) -> dict:
+    def check_cookie(self, cookie: Union[dict, str]) -> dict:
         if isinstance(cookie, dict):
             return cookie
         elif isinstance(cookie, str):
@@ -139,7 +141,7 @@ class Parameter:
         return {}
 
     @staticmethod
-    def add_cookie(cookie: dict | str) -> None | str:
+    def add_cookie(cookie: Union[dict, str]) -> Union[None, str]:
         parameters = (MsToken.get_real_ms_token(), TtWid.get_tt_wid(),)
         if isinstance(cookie, dict):
             for i in parameters:
@@ -164,7 +166,7 @@ class Parameter:
         return self.main_path
 
     @staticmethod
-    def check_root_again(root: Path) -> bool | Path:
+    def check_root_again(root: Path) -> Union[bool, Path]:
         if root.resolve().parent.is_dir():
             root.mkdir()
             return root
@@ -244,8 +246,7 @@ class Parameter:
             self.logger.info(f"chunk 参数已设置为 {chunk}", False)
             return chunk
         self.logger.warning(
-            f"chunk 参数 {chunk} 设置错误，程序将使用默认值：{
-            1024 * 1024}", False)
+            f"chunk 参数 {chunk} 设置错误，程序将使用默认值：{1024 * 1024}", False)
         return 1024 * 1024
 
     def check_max_retry(self, max_retry: int) -> int:
@@ -264,7 +265,7 @@ class Parameter:
                 f"max_pages 参数 {max_pages} 设置错误，程序将使用默认值：99999", False)
         return 99999
 
-    def check_timeout(self, timeout: int | float) -> int | float:
+    def check_timeout(self, timeout: Union[int, float]) -> Union[int, float]:
         if isinstance(timeout, (int, float)) and timeout > 0:
             self.logger.info(f"timeout 参数已设置为 {timeout}", False)
             return timeout

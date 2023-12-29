@@ -1,6 +1,7 @@
 from flask import render_template
 from flask import request
 from flask import url_for
+from typing import Union
 
 from src.DataAcquirer import Live
 from src.main_complete import TikTok
@@ -64,7 +65,7 @@ class WebUI(TikTok):
             return self.generate_works_data(d) if (d := self.input_links_acquisition(
                 tiktok, ids[:1], record, not download)) else {}
 
-    def generate_works_data(self, data: list[dict] | str) -> dict:
+    def generate_works_data(self, data: Union[list[dict], str]) -> dict:
         if isinstance(data, str):
             return self.error_works | {"text": "后台下载作品成功！", "preview": data}
         data = data[0]
@@ -94,10 +95,10 @@ class WebUI(TikTok):
     @staticmethod
     def generate_live_data(data: dict) -> dict:
         return {
-            "text": "\n".join((f"直播标题: {data["title"]}",
-                               f"主播昵称: {data["nickname"]}",
-                               f"在线观众: {data["user_count_str"]}",
-                               f"观看次数: {data["total_user_str"]}",)),
+            "text": "\n".join((f"直播标题: {data['title']}",
+                               f"主播昵称: {data['nickname']}",
+                               f"在线观众: {data['user_count_str']}",
+                               f"观看次数: {data['total_user_str']}",)),
             "flv": data["flv_pull_url"],
             "m3u8": data["hls_pull_url_map"],
             "best": list(data["flv_pull_url"].values())[0],

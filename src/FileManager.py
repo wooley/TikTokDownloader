@@ -86,8 +86,7 @@ class Cache:
             addition: str):
         if not (
                 old_folder := self.root.joinpath(
-                    f"{type_}{id_}_{
-                    self.data[id_]["mark"] or self.data[id_]["name"]}_{addition}")).is_dir():
+                    f"{type_}{id_}_{self.data[id_]['mark'] or self.data[id_]['name']}_{addition}")).is_dir():
             self.log.info(f"{old_folder} 文件夹不存在，自动跳过", False)
             return
         if self.data[id_]["mark"] != mark:
@@ -239,8 +238,7 @@ class DownloadRecorder:
     def __restore_data(self, ids: set) -> set:
         if self.state:
             return ids
-        print(f"[{ERROR}]程序检测到上次运行可能没有正常结束，您的作品下载记录数据可能已经丢失！\n数据文件路径：{
-        self.path.resolve()}[/{ERROR}]")
+        print(f"[{ERROR}]程序检测到上次运行可能没有正常结束，您的作品下载记录数据可能已经丢失！\n数据文件路径：{self.path.resolve()}[/{ERROR}]")
         if self.backup.exists():
             print(
                 f"[{WARNING}]检测到 IDRecorder 备份文件，是否恢复最后一次备份的数据(YES/NO): [/{WARNING}]", end="")
