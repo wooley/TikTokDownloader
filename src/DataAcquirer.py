@@ -5,6 +5,7 @@ from re import compile
 from time import time
 from types import SimpleNamespace
 from typing import Union
+from typing import List, Dict, Tuple
 from urllib.parse import parse_qs
 from urllib.parse import quote
 from urllib.parse import urlencode
@@ -147,7 +148,7 @@ class Acquirer:
 
     def deal_item_data(
             self,
-            data: list[dict],
+            data: List[Dict],
             start: int = None,
             end: int = None):
         for i in data[start:end]:
@@ -349,7 +350,7 @@ class Account(Acquirer):
             self.log.warning(f"作品最晚发布日期无效 {date_}")
             return date.today()
 
-    def run(self) -> tuple[list[dict], date, date]:
+    def run(self) -> Tuple[List[Dict], date, date]:
         with self.progress_object() as progress:
             task_id = progress.add_task(
                 "正在获取账号主页数据", total=None)
@@ -524,7 +525,7 @@ class Comment(Acquirer):
         self.all_data = None
         self.reply_ids = None
 
-    def run(self, extractor: Extractor, recorder, source=False) -> list[dict]:
+    def run(self, extractor: Extractor, recorder, source=False) -> List[Dict]:
         with self.progress_object() as progress:
             task_id = progress.add_task(
                 "正在获取作品评论数据", total=None)
@@ -622,7 +623,7 @@ class Comment(Acquirer):
             return False
 
     @staticmethod
-    def _check_reply_ids(data: list[dict], ids: list) -> list[dict]:
+    def _check_reply_ids(data: List[Dict], ids: list) -> List[Dict]:
         if ids:
             raise ValueError
         return data
