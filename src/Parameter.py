@@ -5,6 +5,8 @@ from random import random
 from string import ascii_letters
 from string import digits
 from typing import Union
+from typing import Tuple
+
 from time import time
 from urllib.parse import urlencode
 
@@ -114,7 +116,7 @@ class Headers:
     )
 
     @staticmethod
-    def generate_user_agent() -> tuple[str, tuple]:
+    def generate_user_agent() -> Tuple[str, Tuple]:
         return Headers.USER_AGENT[randint(0, len(Headers.USER_AGENT) - 1)]
 
 
