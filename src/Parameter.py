@@ -338,7 +338,8 @@ class XBogus:
 
 class MsToken:
     """代码参考: https://github.com/Johnserf-Seed/f2/blob/main/f2/apps/douyin/utils.py"""
-    HEADERS = HEADERS | {"Content-Type": "text/plain;charset=UTF-8"}
+    HEADERS.update({"Content-Type": "text/plain;charset=UTF-8"})
+
     API = "https://mssdk.bytedance.com/web/report"
     DATA = {
         "magic": 538969122,
