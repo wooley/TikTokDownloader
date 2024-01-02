@@ -147,12 +147,12 @@ class Parameter:
         if isinstance(cookie, dict):
             for i in parameters:
                 if isinstance(i, dict):
-                    cookie |= i
+                    cookie.update(i)
         elif isinstance(cookie, str):
             for i in parameters:
                 if isinstance(i, dict):
                     cookie += Register.generate_cookie(i)
-            return cookie
+        return cookie
 
     def check_root(self, root: str) -> Path:
         if not root:

@@ -97,10 +97,16 @@ class Acquirer:
         self.__set_temp_cookie(cookie)
 
     @staticmethod
-    def init_headers(headers: Dict) -> Tuple:
-        return (headers | {
-            "Referer": "https://www.douyin.com/", },
-                {"User-Agent": headers["User-Agent"]})
+    def init_headers(headers: Dict) -> Tuple[Dict, Dict]:
+        # return (headers | {
+        #     "Referer": "https://www.douyin.com/", },
+        #         {"User-Agent": headers["User-Agent"]})
+        # 创建新的字典，包含原始 headers 和额外的 Referer 头
+        new_headers = dict(headers)
+        new_headers.update({"Referer": "https://www.douyin.com/"})
+    
+        # 返回包含两个字典的元组
+        return new_headers, {"User-Agent": headers["User-Agent"]}
 
     def send_request(
             self,
